@@ -1,6 +1,6 @@
 # codespell:ignore all
 
-"""Provide Semantic Tags Translation funcitons."""
+"""Provide Semantic Tags Translation functions."""
 
 COMMON_CLOSURE_NAMESPACE = {
     # Tag Namespace 0x01
