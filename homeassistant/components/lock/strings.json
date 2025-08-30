@@ -42,6 +42,12 @@
         },
         "changed_by": {
           "name": "[%key:component::alarm_control_panel::entity_component::_::state_attributes::changed_by::name%]"
+        },
+        "user_index": {
+          "name": "User Index"
+        },
+        "user_name": {
+          "name": "User Name"
         }
       }
     }

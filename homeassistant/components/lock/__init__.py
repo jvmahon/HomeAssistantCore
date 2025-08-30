@@ -51,6 +51,8 @@ PLATFORM_SCHEMA_BASE = cv.PLATFORM_SCHEMA_BASE
 SCAN_INTERVAL = timedelta(seconds=30)
 
 ATTR_CHANGED_BY = "changed_by"
+ATTR_USER_INDEX = "user_index"
+ATTR_USER_NAME = "user_name"
 CONF_DEFAULT_CODE = "default_code"
 
 MIN_TIME_BETWEEN_SCANS = timedelta(seconds=10)
@@ -66,7 +68,12 @@ class LockEntityFeature(IntFlag):
     OPEN = 1
 
 
-PROP_TO_ATTR = {"changed_by": ATTR_CHANGED_BY, "code_format": ATTR_CODE_FORMAT}
+PROP_TO_ATTR = {
+    "changed_by": ATTR_CHANGED_BY,
+    "code_format": ATTR_CODE_FORMAT,
+    "user_index": ATTR_USER_INDEX,
+    "user_name": ATTR_USER_NAME,
+}
 
 # mypy: disallow-any-generics
 
@@ -119,6 +126,8 @@ CACHED_PROPERTIES_WITH_ATTR_ = {
     "is_opening",
     "is_jammed",
     "supported_features",
+    "user_index",
+    "user_name",
 }
 
 
@@ -136,6 +145,8 @@ class LockEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
     _attr_is_jammed: bool | None = None
     _attr_state: None = None
     _attr_supported_features: LockEntityFeature = LockEntityFeature(0)
+    _attr_user_index: int | None = None
+    _attr_user_name: str | None = None
     _lock_option_default_code: str = ""
     __code_format_cmp: re.Pattern[str] | None = None
 
@@ -165,6 +176,16 @@ class LockEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
     def changed_by(self) -> str | None:
         """Last change triggered by."""
         return self._attr_changed_by
+
+    @cached_property
+    def user_index(self) -> int | None:
+        """User index that triggered the last change."""
+        return self._attr_user_index
+
+    @cached_property
+    def user_name(self) -> str | None:
+        """User name that triggered the last change."""
+        return self._attr_user_name
 
     @cached_property
     def code_format(self) -> str | None:
