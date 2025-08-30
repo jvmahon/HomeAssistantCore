@@ -103,6 +103,7 @@ class MatterLock(MatterEntity, LockEntity):
                 self._attr_changed_by = DOOR_LOCK_OPERATION_SOURCE.get(
                     operation_source, "Unknown"
                 )
+                self._attr_user_index = 1
                 self.async_write_ha_state()
 
     @property
