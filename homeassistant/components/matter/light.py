@@ -177,6 +177,10 @@ class MatterLight(MatterEntity, LightEntity):
             )
         )
 
+        if (self._attr_brightness == level) and self._attr_is_on:
+            # if already at the correct level and on, do nothing
+            return
+
         await self.send_device_command(
             clusters.LevelControl.Commands.MoveToLevelWithOnOff(
                 level=level,
@@ -319,15 +323,17 @@ class MatterLight(MatterEntity, LightEntity):
             await self._set_brightness(brightness, transition)
             return
 
-        await self.send_device_command(
-            clusters.OnOff.Commands.On(),
-        )
+        if not self._attr_is_on:
+            await self.send_device_command(
+                clusters.OnOff.Commands.On(),
+            )
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn light off."""
-        await self.send_device_command(
-            clusters.OnOff.Commands.Off(),
-        )
+        if self._attr_is_on:
+            await self.send_device_command(
+                clusters.OnOff.Commands.Off(),
+            )
 
     @callback
     def _update_from_device(self) -> None:
